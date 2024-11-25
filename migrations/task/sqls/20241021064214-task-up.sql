@@ -16,31 +16,31 @@
 --     5. 用戶名稱為`Q太郎`，Email 為`starplatinum@hexschooltest.io`，Role為`USER`
 --     6. 用戶名稱為 透明人，Email 為 opacity0@hexschooltest.io，Role 為 USER
 INSERT INTO "USER" (name, email, role) VALUES
-('李燕容', 'lee2000@hexschooltest.io', 'USER'),
-('王小明', 'wXlTq@hexschooltest.io', 'USER'),
-('肌肉棒子', 'muscle@hexschooltest.io', 'USER'),
-('好野人', 'richman@hexschooltest.io', 'USER'),
-('Q太郎', 'starplatinum@hexschooltest.io', 'USER'),
-('透明人', 'opacity0@hexschooltest.io', 'USER');
+('李燕容', 'lee2000@hexschooltest.io', 'USER'), -- 新增用戶 "李燕容"，角色為 "USER"
+('王小明', 'wXlTq@hexschooltest.io', 'USER'),  -- 新增用戶 "王小明"，角色為 "USER"
+('肌肉棒子', 'muscle@hexschooltest.io', 'USER'), -- 新增用戶 "肌肉棒子"，角色為 "USER"
+('好野人', 'richman@hexschooltest.io', 'USER'), -- 新增用戶 "好野人"，角色為 "USER"
+('Q太郎', 'starplatinum@hexschooltest.io', 'USER'), -- 新增用戶 "Q太郎"，角色為 "USER"
+('透明人', 'opacity0@hexschooltest.io', 'USER'); -- 新增用戶 "透明人"，角色為 "USER"
 
 -- 1-2 修改：用 Email 找到 李燕容、肌肉棒子、Q太郎，如果他的 Role 為 USER 將他的 Role 改為 COACH
 UPDATE "USER"
-SET role = 'COACH'
-WHERE email IN ('lee2000@hexschooltest.io', 'muscle@hexschooltest.io', 'starplatinum@hexschooltest.io')
-  AND role = 'USER';
+SET role = 'COACH' -- 將角色更新為 "COACH"
+WHERE email IN ('lee2000@hexschooltest.io', 'muscle@hexschooltest.io', 'starplatinum@hexschooltest.io') -- 篩選目標用戶
+  AND role = 'USER'; -- 確保僅修改角色目前為 "USER" 的資料
 
 -- 1-3 刪除：刪除USER 資料表中，用 Email 找到透明人，並刪除該筆資料
 DELETE FROM "USER"
-WHERE email = 'opacity0@hexschooltest.io';
+WHERE email = 'opacity0@hexschooltest.io'; -- 指定刪除的用戶 Email
 
 -- 1-4 查詢：取得USER 資料表目前所有用戶數量（提示：使用count函式）
-SELECT COUNT(*) AS 用戶數量
+SELECT COUNT(*) AS 用戶數量 -- 使用 COUNT 函數統計總數，並命名為 "用戶數量"
 FROM "USER";
 
 -- 1-5 查詢：取得 USER 資料表所有用戶資料，並列出前 3 筆（提示：使用limit語法）
-SELECT *
-FROM "USER"
-LIMIT 3;
+SELECT * -- 選取所有欄位
+FROM "USER" -- 從 USER 資料表中
+LIMIT 3; -- 僅返回前 3 筆記錄
 
 --  ████████  █████   █    ████  
 --    █ █   ██    █  █         █ 
