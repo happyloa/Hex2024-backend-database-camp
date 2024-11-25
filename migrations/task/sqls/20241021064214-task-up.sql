@@ -54,9 +54,9 @@ LIMIT 3; -- 僅返回前 3 筆記錄
     -- 2. 名稱為`14 堂組合包方案`，價格為`2,520` 元，堂數為`14`
     -- 3. 名稱為 `21 堂組合包方案`，價格為`4,800` 元，堂數為`21`
 INSERT INTO "CREDIT_PACKAGE" (name, credit_amount, price) VALUES
-('7 堂組合包方案', 7, 1400),
-('14 堂組合包方案', 14, 2520),
-('21 堂組合包方案', 21, 4800);
+('7 堂組合包方案', 7, 1400), -- 新增一個名稱為 "7 堂組合包方案" 的記錄，包含 7 堂課程，價格為 1,400 元
+('14 堂組合包方案', 14, 2520), -- 新增一個名稱為 "14 堂組合包方案" 的記錄，包含 14 堂課程，價格為 2,520 元
+('21 堂組合包方案', 21, 4800); -- 新增一個名稱為 "21 堂組合包方案" 的記錄，包含 21 堂課程，價格為 4,800 元
 
 -- 2-2. 新增：在 `CREDIT_PURCHASE` 資料表，新增三筆資料：（請使用 name 欄位做子查詢）
     -- 1. `王小明` 購買 `14 堂組合包方案`
@@ -65,22 +65,22 @@ INSERT INTO "CREDIT_PACKAGE" (name, credit_amount, price) VALUES
 INSERT INTO "CREDIT_PURCHASE" (user_id, credit_package_id, purchased_credits, price_paid)
 VALUES
 (
-    (SELECT id FROM "USER" WHERE name = '王小明'), 
-    (SELECT id FROM "CREDIT_PACKAGE" WHERE name = '14 堂組合包方案'), 
-    14, 
-    2520
+    (SELECT id FROM "USER" WHERE name = '王小明'), -- 從 USER 資料表中查找名稱為 "王小明" 的用戶 ID
+    (SELECT id FROM "CREDIT_PACKAGE" WHERE name = '14 堂組合包方案'), -- 從 CREDIT_PACKAGE 資料表中查找名稱為 "14 堂組合包方案" 的套餐 ID
+    14, -- 購買的堂數為 14
+    2520 -- 支付金額為 2,520 元
 ),
 (
-    (SELECT id FROM "USER" WHERE name = '王小明'), 
-    (SELECT id FROM "CREDIT_PACKAGE" WHERE name = '21 堂組合包方案'), 
-    21, 
-    4800
+    (SELECT id FROM "USER" WHERE name = '王小明'), -- 查找名稱為 "王小明" 的用戶 ID
+    (SELECT id FROM "CREDIT_PACKAGE" WHERE name = '21 堂組合包方案'), -- 查找名稱為 "21 堂組合包方案" 的套餐 ID
+    21, -- 購買的堂數為 21
+    4800 -- 支付金額為 4,800 元
 ),
 (
-    (SELECT id FROM "USER" WHERE name = '好野人'), 
-    (SELECT id FROM "CREDIT_PACKAGE" WHERE name = '14 堂組合包方案'), 
-    14, 
-    2520
+    (SELECT id FROM "USER" WHERE name = '好野人'), -- 查找名稱為 "好野人" 的用戶 ID
+    (SELECT id FROM "CREDIT_PACKAGE" WHERE name = '14 堂組合包方案'), -- 查找名稱為 "14 堂組合包方案" 的套餐 ID
+    14, -- 購買的堂數為 14
+    2520 -- 支付金額為 2,520 元
 );
 
 -- ████████  █████   █    ████   
