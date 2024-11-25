@@ -217,27 +217,27 @@ VALUES (
 INSERT INTO "COURSE_BOOKING" (user_id, course_id, booking_at, status)
 VALUES
 (
-    (SELECT id FROM "USER" WHERE name = '王小明'),
-    (SELECT id FROM "COURSE" WHERE user_id = (SELECT id FROM "USER" WHERE name = '李燕容')),
-    '2024-11-24 16:00:00',
-    '即將授課'
+    (SELECT id FROM "USER" WHERE name = '王小明'), -- 查找用戶 "王小明" 的 user_id
+    (SELECT id FROM "COURSE" WHERE user_id = (SELECT id FROM "USER" WHERE name = '李燕容')), -- 查找教練 "李燕容" 的課程 course_id
+    '2024-11-24 16:00:00', -- 預約時間
+    '即將授課' -- 預約狀態
 ),
 (
-    (SELECT id FROM "USER" WHERE name = '好野人'),
-    (SELECT id FROM "COURSE" WHERE user_id = (SELECT id FROM "USER" WHERE name = '李燕容')),
-    '2024-11-24 16:00:00',
-    '即將授課'
+    (SELECT id FROM "USER" WHERE name = '好野人'), -- 查找用戶 "好野人" 的 user_id
+    (SELECT id FROM "COURSE" WHERE user_id = (SELECT id FROM "USER" WHERE name = '李燕容')), -- 查找教練 "李燕容" 的課程 course_id
+    '2024-11-24 16:00:00', -- 預約時間
+    '即將授課' -- 預約狀態
 );
 
 -- 5-2. 修改：`王小明`取消預約 `李燕容` 的課程，請在`COURSE_BOOKING`更新該筆預約資料：
     -- 1. 取消預約時間`cancelled_at` 設為2024-11-24 17:00:00
     -- 2. 狀態`status` 設定為課程已取消
 UPDATE "COURSE_BOOKING"
-SET cancelled_at = '2024-11-24 17:00:00',
-    status = '課程已取消'
-WHERE user_id = (SELECT id FROM "USER" WHERE name = '王小明')
-  AND course_id = (SELECT id FROM "COURSE" WHERE user_id = (SELECT id FROM "USER" WHERE name = '李燕容'))
-  AND status = '即將授課';
+SET cancelled_at = '2024-11-24 17:00:00', -- 設定取消時間
+    status = '課程已取消' -- 更新狀態為取消
+WHERE user_id = (SELECT id FROM "USER" WHERE name = '王小明') -- 查找 "王小明" 的 user_id
+  AND course_id = (SELECT id FROM "COURSE" WHERE user_id = (SELECT id FROM "USER" WHERE name = '李燕容')) -- 查找教練 "李燕容" 的課程
+  AND status = '即將授課'; -- 限制修改條件僅限 "即將授課"
 
 -- 5-3. 新增：`王小明`再次預約 `李燕容`   的課程，請在`COURSE_BOOKING`新增一筆資料：
     -- 1. 預約人設為`王小明`
@@ -245,38 +245,38 @@ WHERE user_id = (SELECT id FROM "USER" WHERE name = '王小明')
     -- 3. 狀態`status` 設定為即將授課
 INSERT INTO "COURSE_BOOKING" (user_id, course_id, booking_at, status)
 VALUES (
-    (SELECT id FROM "USER" WHERE name = '王小明'),
-    (SELECT id FROM "COURSE" WHERE user_id = (SELECT id FROM "USER" WHERE name = '李燕容')),
-    '2024-11-24 17:10:25',
-    '即將授課'
+    (SELECT id FROM "USER" WHERE name = '王小明'), -- 查找用戶 "王小明" 的 user_id
+    (SELECT id FROM "COURSE" WHERE user_id = (SELECT id FROM "USER" WHERE name = '李燕容')), -- 查找教練 "李燕容" 的課程 course_id
+    '2024-11-24 17:10:25', -- 預約時間
+    '即將授課' -- 預約狀態
 );
 
 -- 5-4. 查詢：取得王小明所有的預約紀錄，包含取消預約的紀錄
 SELECT *
 FROM "COURSE_BOOKING"
-WHERE user_id = (SELECT id FROM "USER" WHERE name = '王小明');
+WHERE user_id = (SELECT id FROM "USER" WHERE name = '王小明'); -- 查找 "王小明" 的 user_id
 
 -- 5-5. 修改：`王小明` 現在已經加入直播室了，請在`COURSE_BOOKING`更新該筆預約資料（請注意，不要更新到已經取消的紀錄）：
     -- 1. 請在該筆預約記錄他的加入直播室時間 `join_at` 設為2024-11-25 14:01:59
     -- 2. 狀態`status` 設定為上課中
 UPDATE "COURSE_BOOKING"
-SET join_at = '2024-11-25 14:01:59',
-    status = '上課中'
-WHERE user_id = (SELECT id FROM "USER" WHERE name = '王小明')
-  AND course_id = (SELECT id FROM "COURSE" WHERE user_id = (SELECT id FROM "USER" WHERE name = '李燕容'))
-  AND status = '即將授課';
+SET join_at = '2024-11-25 14:01:59', -- 設定加入直播室時間
+    status = '上課中' -- 更新狀態為 "上課中"
+WHERE user_id = (SELECT id FROM "USER" WHERE name = '王小明') -- 查找 "王小明" 的 user_id
+  AND course_id = (SELECT id FROM "COURSE" WHERE user_id = (SELECT id FROM "USER" WHERE name = '李燕容')) -- 查找教練 "李燕容" 的課程
+  AND status = '即將授課'; -- 限制修改條件
 
 -- 5-6. 查詢：計算用戶王小明的購買堂數，顯示須包含以下欄位： user_id , total。 (需使用到 SUM 函式與 Group By)
-SELECT user_id, SUM(purchased_credits) AS total
+SELECT user_id, SUM(purchased_credits) AS total -- 計算購買堂數總和
 FROM "CREDIT_PURCHASE"
-WHERE user_id = (SELECT id FROM "USER" WHERE name = '王小明')
+WHERE user_id = (SELECT id FROM "USER" WHERE name = '王小明') -- 查找 "王小明" 的 user_id
 GROUP BY user_id;
 
 -- 5-7. 查詢：計算用戶王小明的已使用堂數，顯示須包含以下欄位： user_id , total。 (需使用到 Count 函式與 Group By)
-SELECT user_id, COUNT(*) AS total
+SELECT user_id, COUNT(*) AS total -- 計算已使用堂數
 FROM "COURSE_BOOKING"
-WHERE user_id = (SELECT id FROM "USER" WHERE name = '王小明')
-  AND status IN ('上課中', '已完成')
+WHERE user_id = (SELECT id FROM "USER" WHERE name = '王小明') -- 查找 "王小明" 的 user_id
+  AND status IN ('上課中', '已完成') -- 限制條件為已上課或已完成
 GROUP BY user_id;
 
 -- 5-8. [挑戰題] 查詢：請在一次查詢中，計算用戶王小明的剩餘可用堂數，顯示須包含以下欄位： user_id , remaining_credit
@@ -287,16 +287,16 @@ GROUP BY user_id;
     -- on "COURSE_BOOKING".user_id = "CREDIT_PURCHASE".user_id;
 SELECT 
     cp.user_id,
-    (SUM(cp.purchased_credits) - COUNT(cb.id)) AS remaining_credit
+    (SUM(cp.purchased_credits) - COUNT(cb.id)) AS remaining_credit -- 計算剩餘堂數
 FROM 
     "CREDIT_PURCHASE" cp
 LEFT JOIN 
     "COURSE_BOOKING" cb 
 ON 
-    cp.user_id = cb.user_id
+    cp.user_id = cb.user_id -- 連接購買與使用堂數
 WHERE 
-    cp.user_id = (SELECT id FROM "USER" WHERE name = '王小明')
-  AND (cb.status IS NULL OR cb.status IN ('即將授課', '上課中', '已完成'))
+    cp.user_id = (SELECT id FROM "USER" WHERE name = '王小明') -- 查找 "王小明" 的 user_id
+  AND (cb.status IS NULL OR cb.status IN ('即將授課', '上課中', '已完成')) -- 過濾有效的堂數
 GROUP BY 
     cp.user_id;
 
