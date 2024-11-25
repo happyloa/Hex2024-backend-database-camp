@@ -124,7 +124,7 @@ WHERE
 INSERT INTO "COACH_LINK_SKILL" (coach_id, skill_id)
 VALUES (
     (SELECT id FROM "COACH" WHERE user_id = (SELECT id FROM "USER" WHERE email = 'muscle@hexschooltest.io')),  -- 查找 `肌肉棒子` 的 coach_id
-    (SELECT id FROM "SKILL" WHERE name = '瑜珈') -- 查找 `瑜珈` 專長的 skill_id
+    (SELECT id FROM "SKILL" WHERE name = '瑜伽') -- 查找 `瑜伽` 專長的 skill_id
 );
 
 -- 教練 `Q太郎` 的 `有氧運動` 與 `復健訓練` 專長
