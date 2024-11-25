@@ -177,24 +177,24 @@ WHERE name = '空中瑜伽'; -- 刪除專長名稱為 "空中瑜伽" 的記錄
     -- 6. 最大授課人數`max_participants` 設定為10
     -- 7. 授課連結設定`meeting_url`為 https://test-meeting.test.io
 INSERT INTO "COURSE" (
-    user_id, 
-    skill_id, 
-    name, 
-    description, 
-    start_at, 
-    end_at, 
-    max_participants, 
-    meeting_url
+    user_id, -- 教練的 ID，從 USER 資料表查找
+    skill_id, -- 課程專長的 ID，從 SKILL 資料表查找
+    name, -- 課程名稱
+    description, -- 課程描述
+    start_at, -- 課程開始時間
+    end_at, -- 課程結束時間
+    max_participants, -- 最大參與人數
+    meeting_url -- 授課連結
 )
 VALUES (
-    (SELECT id FROM "USER" WHERE email = 'lee2000@hexschooltest.io'), -- 教練 `李燕容`
-    (SELECT id FROM "SKILL" WHERE name = '重訓'),                     -- 專長 `重訓`
-    '重訓基礎課',                                                   -- 課程名稱
-    '本課程適合初學者，教授重訓基礎動作與技巧',                     -- 課程描述
-    '2024-11-25 14:00:00',                                         -- 開始時間
-    '2024-11-25 16:00:00',                                         -- 結束時間
-    10,                                                            -- 最大人數
-    'https://test-meeting.test.io'                                 -- 授課連結
+    (SELECT id FROM "USER" WHERE email = 'lee2000@hexschooltest.io'), -- 從 USER 資料表查找教練 `李燕容` 的 ID
+    (SELECT id FROM "SKILL" WHERE name = '重訓'),                     -- 從 SKILL 資料表查找 `重訓` 的專長 ID
+    '重訓基礎課',                                                   -- 設定課程名稱為 "重訓基礎課"
+    '本課程適合初學者，教授重訓基礎動作與技巧',                     -- 設定課程描述
+    '2024-11-25 14:00:00',                                         -- 課程開始時間
+    '2024-11-25 16:00:00',                                         -- 課程結束時間
+    10,                                                            -- 最大參與人數設定為 10
+    'https://test-meeting.test.io'                                 -- 授課連結 URL
 );
 
 -- ████████  █████   █    █████ 
