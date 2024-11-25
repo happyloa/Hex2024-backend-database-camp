@@ -310,68 +310,68 @@ GROUP BY
 -- 6-1 查詢：查詢專長為重訓的教練，並按經驗年數排序，由資深到資淺（需使用 inner join 與 order by 語法)
 -- 顯示須包含以下欄位： 教練名稱 , 經驗年數, 專長名稱
 SELECT 
-    u.name AS 教練名稱,
-    c.experience_years AS 經驗年數,
-    s.name AS 專長名稱
+    u.name AS 教練名稱, -- 教練的名稱，從 USER 資料表取得
+    c.experience_years AS 經驗年數, -- 教練的經驗年數，從 COACH 資料表取得
+    s.name AS 專長名稱 -- 專長名稱，從 SKILL 資料表取得
 FROM 
     "COACH" c
 INNER JOIN 
-    "USER" u ON c.user_id = u.id
+    "USER" u ON c.user_id = u.id -- 連接 USER 資料表以獲取教練的名稱
 INNER JOIN 
-    "COACH_LINK_SKILL" cls ON c.id = cls.coach_id
+    "COACH_LINK_SKILL" cls ON c.id = cls.coach_id -- 連接 COACH_LINK_SKILL 資料表以獲取教練與專長的關聯
 INNER JOIN 
-    "SKILL" s ON cls.skill_id = s.id
+    "SKILL" s ON cls.skill_id = s.id -- 連接 SKILL 資料表以獲取專長名稱
 WHERE 
-    s.name = '重訓'
+    s.name = '重訓' -- 篩選專長為 "重訓"
 ORDER BY 
-    c.experience_years DESC;
+    c.experience_years DESC; -- 按經驗年數排序，由資深到資淺
 
 -- 6-2 查詢：查詢每種專長的教練數量，並只列出教練數量最多的專長（需使用 group by, inner join 與 order by 與 limit 語法）
 -- 顯示須包含以下欄位： 專長名稱, coach_total
 SELECT 
-    s.name AS 專長名稱,
-    COUNT(c.id) AS coach_total
+    s.name AS 專長名稱, -- 專長名稱
+    COUNT(c.id) AS coach_total -- 教練數量
 FROM 
     "SKILL" s
 INNER JOIN 
-    "COACH_LINK_SKILL" cls ON s.id = cls.skill_id
+    "COACH_LINK_SKILL" cls ON s.id = cls.skill_id -- 連接 COACH_LINK_SKILL 獲取專長的關聯
 INNER JOIN 
-    "COACH" c ON cls.coach_id = c.id
+    "COACH" c ON cls.coach_id = c.id -- 連接 COACH 資料表獲取教練的資料
 GROUP BY 
-    s.name
+    s.name -- 按專長名稱分組
 ORDER BY 
-    coach_total DESC
-LIMIT 1;
+    coach_total DESC -- 按教練數量降序排序
+LIMIT 1; -- 僅選取教練數量最多的專長
 
 -- 6-3. 查詢：計算 11 月份組合包方案的銷售數量
 -- 顯示須包含以下欄位： 組合包方案名稱, 銷售數量
 SELECT 
-    cp.name AS 組合包方案名稱,
-    COUNT(cpr.id) AS 銷售數量
+    cp.name AS 組合包方案名稱, -- 組合包名稱
+    COUNT(cpr.id) AS 銷售數量 -- 銷售數量
 FROM 
     "CREDIT_PACKAGE" cp
 INNER JOIN 
-    "CREDIT_PURCHASE" cpr ON cp.id = cpr.credit_package_id
+    "CREDIT_PURCHASE" cpr ON cp.id = cpr.credit_package_id -- 連接 CREDIT_PURCHASE 資料表獲取銷售記錄
 WHERE 
-    EXTRACT(MONTH FROM cpr.purchase_at) = 11
+    EXTRACT(MONTH FROM cpr.purchase_at) = 11 -- 篩選 11 月份的記錄
 GROUP BY 
-    cp.name;
+    cp.name; -- 按組合包名稱分組
 
 -- 6-4. 查詢：計算 11 月份總營收（使用 purchase_at 欄位統計）
 -- 顯示須包含以下欄位： 總營收
 SELECT 
-    SUM(cpr.price_paid) AS 總營收
+    SUM(cpr.price_paid) AS 總營收 -- 總營收為支付金額的總和
 FROM 
     "CREDIT_PURCHASE" cpr
 WHERE 
-    EXTRACT(MONTH FROM cpr.purchase_at) = 11;
+    EXTRACT(MONTH FROM cpr.purchase_at) = 11; -- 篩選購買日期為 11 月的記錄
 
 -- 6-5. 查詢：計算 11 月份有預約課程的會員人數（需使用 Distinct，並用 created_at 和 status 欄位統計）
 -- 顯示須包含以下欄位： 預約會員人數
 SELECT 
-    COUNT(DISTINCT cb.user_id) AS 預約會員人數
+    COUNT(DISTINCT cb.user_id) AS 預約會員人數 -- 統計不重複的會員數
 FROM 
     "COURSE_BOOKING" cb
 WHERE 
-    EXTRACT(MONTH FROM cb.created_at) = 11 
-    AND cb.status = 'active';
+    EXTRACT(MONTH FROM cb.created_at) = 11 -- 篩選預約時間為 11 月
+    AND cb.status = 'active'; -- 篩選預約狀態為 "active"
