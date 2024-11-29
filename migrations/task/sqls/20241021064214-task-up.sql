@@ -284,19 +284,20 @@ GROUP BY user_id;
     -- inner join ( 用戶王小明的已使用堂數) as "COURSE_BOOKING"
     -- on "COURSE_BOOKING".user_id = "CREDIT_PURCHASE".user_id;
 SELECT 
-    cp.user_id,
-    (SUM(cp.purchased_credits) - COUNT(cb.id)) AS remaining_credit -- 計算剩餘堂數
+    cp.user_id, -- 選取用戶的 ID
+    (SUM(cp.purchased_credits) -- 總購買堂數
+     - 
+     (SELECT COUNT(*) -- 子查詢計算已使用堂數
+      FROM "COURSE_BOOKING" -- 來自預約課程的資料表
+      WHERE user_id = cp.user_id -- 條件：與購買記錄中同一位用戶的記錄
+        AND status IN ('上課中', '已完成') -- 條件：堂數狀態為有效的已使用堂數
+     )) AS remaining_credit -- 最後計算剩餘堂數：購買數減去已使用數
 FROM 
-    "CREDIT_PURCHASE" cp
-LEFT JOIN 
-    "COURSE_BOOKING" cb 
-ON 
-    cp.user_id = cb.user_id -- 連接購買與使用堂數
+    "CREDIT_PURCHASE" cp -- 資料來自購買堂數的資料表
 WHERE 
-    cp.user_id = (SELECT id FROM "USER" WHERE name = '王小明') -- 查找 "王小明" 的 user_id
-  AND (cb.status IS NULL OR cb.status IN ('即將授課', '上課中', '已完成')) -- 過濾有效的堂數
+    cp.user_id = (SELECT id FROM "USER" WHERE name = '王小明') -- 條件：限定為名叫「王小明」的用戶
 GROUP BY 
-    cp.user_id;
+    cp.user_id; -- 按用戶分組，因為每個用戶有多筆購買記錄
 
 -- ████████  █████   █     ███  
 --   █ █   ██    █  █     █     
